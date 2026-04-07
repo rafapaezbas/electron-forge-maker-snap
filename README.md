@@ -1,4 +1,4 @@
-# repo-template
+# @holepunchto/electron-forge-maker-snap
 
 Template repository for creating packages
 
