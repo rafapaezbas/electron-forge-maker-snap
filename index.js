@@ -76,12 +76,12 @@ class MakerSnap extends MakerBase {
     const snapGuiPath = 'snap/gui'
     const iconPath = `${snapGuiPath}/${iconFile}`
     const desktopPath = `${snapGuiPath}/${desktopFile}`
-    const snapGuiPathAbs = path.join(dir, snapGuiPath)
+    const snapGuiPathAbs = path.join(buildDir, snapGuiPath)
     fs.mkdirSync(snapGuiPathAbs, { recursive: true })
     fs.copyFileSync(this.config.icon, path.join(snapGuiPathAbs, iconFile))
     fs.writeFileSync(path.join(snapGuiPathAbs, desktopFile), `[Desktop Entry]
 Exec=${snapName}
-Icon=\${SNAP}/meta/gui/${snapName}.png
+Icon=${snapName}
 `, 'utf8')
 
     // Copy snapcraft.yaml into build dir
