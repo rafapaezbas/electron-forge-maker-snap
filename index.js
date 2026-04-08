@@ -14,7 +14,7 @@ class MakerSnap extends MakerBase {
     return process.platform === 'linux'
   }
 
-  async make({ dir, appName, packageJSON, targetArch }) {
+  async make({ dir, appName, packageJSON, targetArch, makeDir }) {
     if (!this.config.snapcraftYamlPath) {
       throw new Error(
         `MakerSnap: snapcraftYamlPath needs to be defined: ${this.config.snapcraftYamlPath}`
@@ -42,8 +42,7 @@ class MakerSnap extends MakerBase {
 
     // Copy snapcraft.yaml into build dir
     const buildDir = path.dirname(dir)
-    const snapStr = 'snap'
-    const snapDir = path.join(buildDir, snapStr)
+    const snapDir = path.join(buildDir, 'snap')
     fs.rmSync(snapDir, { recursive: true, force: true })
     fs.mkdirSync(snapDir)
 
@@ -57,10 +56,10 @@ class MakerSnap extends MakerBase {
       .replace('__NAME__', appName)
     fs.writeFileSync(path.join(snapDir, 'snapcraft.yaml'), snapcraftYamlSource)
 
-    const outputFile = path.join(snapDir, `${snapName}_${version}_${snapArch}.snap`)
+    const outputFile = path.join(makeDir, `${snapName}_${version}_${snapArch}.snap`)
 
     // Run snapcraft
-    execSync(`sudo -u $USER -E snapcraft pack --output ${snapStr}`, {
+    execSync(`sudo -u $USER -E snapcraft pack --output make`, {
       cwd: buildDir,
       stdio: 'inherit',
       shell: true,
